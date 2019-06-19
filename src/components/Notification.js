@@ -5,7 +5,8 @@ import { Alert } from 'react-bootstrap'
 
 const Notification = (props) => {
   const store = props.store
-  if (store.getState() === null || store.getState().length === 0||store.getState() === '') {
+  console.log(store)
+  if (store.getState() === null || store.getState().length === 0 || store.getState() === '') {
     return null
   }
 
