@@ -11,13 +11,15 @@ import loginService from './services/login'
 import userService from './services/users'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
+import CommentForm from './components/CommentForm'
 import Togglable from './components/Togglable'
 import useField  from './hooks/index'
 import Notification from './components/Notification'
 import { toggleNotification } from './reducers/blogReducer'
 import './css/message.css'
-import { Button } from 'react-bootstrap'
+import { Button, Form } from 'react-bootstrap'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 
 const Page = styled.div`
   padding: 1em;
@@ -41,6 +43,10 @@ const App = (props) => {
   const author = useField('text')
   const url = useField('text')
   const [users, setUsers] = useState([])
+  //const comment = useField('text')
+  const [id, setId] = useState('')
+  const [comment, setComment] = useState('')
+  //const [comment, setComment] = useState('')
 
   // useEffect(() => {
   //   blogService
@@ -159,6 +165,34 @@ const App = (props) => {
       })
   }
 
+
+
+
+  const handleComment = ( event ) => {
+    event.preventDefault()
+    console.log('here we are', comment, id)
+    const commentObject = {
+      comment: comment,
+      id: id
+    }
+
+    console.log(commentObject)
+    blogService.sendComment(commentObject)
+      .then(returnedBlog => {
+        const newBlogs = blogs.filter(blog => blog.id !== id)
+        setBlogs(newBlogs.concat(returnedBlog))
+        setComment('')
+        setId('')
+      })
+      .catch(() => {
+        store.dispatch(toggleNotification(`jotain meni pieleen`))
+        setTimeout(() => {
+          store.dispatch(toggleNotification(null))
+        }, 5000)
+      })
+
+  }
+
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
     const showWhenVisible = { display: loginVisible ? '' : 'none' }
@@ -225,7 +259,7 @@ const App = (props) => {
   }
 
   const User = ({ user }) => {
-    if ( user === undefined) { 
+    if ( user === undefined) {
       return null
     }
 
@@ -244,17 +278,45 @@ const App = (props) => {
     )
   }
 
+  const handleCommentChange = (event) => {
+    setComment(event.target.value)
+  }
+
+
   const BlogView = ({ blog }) => {
-    if ( blog === undefined) { 
+    if ( blog === undefined) {
       return null
     }
+    const comments = blog.comments
+    setId(blog.id)
 
     return (
       <div>
         <div>
-          {blog.title} {blog.author}
+          <h2>{blog.title} {blog.author}</h2>
           <br></br><a href={blog.url}>{blog.url}</a><br></br>{blog.likes} likes<button>like</button>
           <br></br>added by {blog.user.name}
+        </div>
+        <div>
+          <h4>comments</h4>
+          <ul>
+            {comments.map(comment =>
+              <li key={comment.id}>
+                {comment}
+              </li>
+            )}
+          </ul>
+          <form onSubmit={handleComment}>
+            <div>
+              <input
+                type="text"
+                value={comment}
+                name="comment"
+                onChange={handleCommentChange}
+              />
+            </div>
+            <button type="submit" >add a comment</button>
+          </form>
         </div>
       </div>
     )

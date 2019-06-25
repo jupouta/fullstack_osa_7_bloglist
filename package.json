@@ -18,7 +18,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:webpack": "webpack-dev-server --mode=production",
     "build": "react-scripts build",
+    "build:webpack": "webpack --mode=production",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint .",
@@ -36,10 +38,20 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
     "@testing-library/react": "^8.0.1",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.0.0",
     "cypress": "^3.3.1",
     "eslint": "^5.16.0",
     "eslint-plugin-jest": "^22.6.4",
-    "jest-dom": "^3.4.0"
+    "jest-dom": "^3.4.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^3.7.2"
   }
 }
