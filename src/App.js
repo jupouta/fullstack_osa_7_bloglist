@@ -46,7 +46,6 @@ const App = (props) => {
   //const comment = useField('text')
   const [id, setId] = useState('')
   const [comment, setComment] = useState('')
-  //const [comment, setComment] = useState('')
 
   // useEffect(() => {
   //   blogService
@@ -165,9 +164,6 @@ const App = (props) => {
       })
   }
 
-
-
-
   const handleComment = ( event ) => {
     event.preventDefault()
     console.log('here we are', comment, id)
@@ -246,14 +242,22 @@ const App = (props) => {
     return (
       <div>
         <h2>Users</h2>
-        <ul>
-          {users.map(user =>
-            <li key={user.id}>
-              <Link to={`/users/${user.id}`}>{user.name}</Link>
-              {user.blogs.length}
-            </li>
-          )}
-        </ul>
+        <table>
+          <tbody>
+            <tr>
+              <th></th>
+              <th>
+              blogs created
+              </th>
+            </tr>
+            {users.map(user =>
+              <tr key={user.id}>
+                <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
+                <td>{user.blogs.length}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     )
   }
@@ -276,10 +280,6 @@ const App = (props) => {
         </ul>
       </div>
     )
-  }
-
-  const handleCommentChange = (event) => {
-    setComment(event.target.value)
   }
 
 
@@ -309,10 +309,8 @@ const App = (props) => {
           <form onSubmit={handleComment}>
             <div>
               <input
-                type="text"
                 value={comment}
-                name="comment"
-                onChange={handleCommentChange}
+                onChange={({ target }) => setComment(target.value)}
               />
             </div>
             <button type="submit" >add a comment</button>
@@ -361,22 +359,9 @@ const App = (props) => {
           author={author}
           url={url} />
       </Togglable>
-
-      
     </Page>
   )
 
 }
-// const mapStateToProps = (state) => {
-//   console.log(state)
-//   return {
-//     bloglist: state.blogslist,
-//   }
-// }
-
-// const mapDispatchToProps = {
-//   initializeBlogs
-// }
 
 export default App
-//export default connect(null, { initializeBlogs })(App)
